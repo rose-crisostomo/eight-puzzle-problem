@@ -1,5 +1,5 @@
 [package]
-name = "eight_puzzle_bfs"
+name = "eight_puzzle_problem"
 version = "0.1.0"
 edition = "2024"
 

@@ -9,7 +9,7 @@ cases:
       - [4, 5, 6]
       - [7, 8, 0]
 
-  - dfs_limit: 5000 # cutoff
+  - dfs_limit: 50000 # cutoff
     initial_state:
       - [0, 1, 3]
       - [4, 2, 5]

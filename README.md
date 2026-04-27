@@ -92,26 +92,69 @@ Each case has its own `dfs_limit` to tune how deep DFS is allowed to search.
 
 ---
 
-## Usage
+## Running on Windows
 
-### Build
+There are two ways to run the solver on Windows: using the provided pre-built binary (no setup required), or building from source with Rust.
 
-```bash
-cargo build --release
+---
+
+### Option A — Pre-built Binary (Recommended)
+
+No installation needed. The `.exe` is already compiled and ready to run.
+
+1. Download `eight_puzzle_problem.exe` and `input.yml` and place them in the **same folder**.
+2. Open that folder in **Command Prompt** or **PowerShell**.
+3. Run the solver:
+```powershell
+.\eight_puzzle_problem.exe
 ```
 
-### Run
+With options:
+```powershell
+# Print the full move-by-move solution
+.\eight_puzzle_problem.exe --print-moves
 
-```bash
-# Default input file (input.yml)
-cargo run
-
-# Custom input file
-cargo run -- --input custom.yml
-
-# Print full move sequence
-cargo run -- --print-moves
+# Use a different input file
+.\eight_puzzle_problem.exe --input my-puzzles.yml
 ```
+
+---
+
+### Option B — Build from Source (Requires Rust)
+
+Follow these steps if you want to modify and recompile the code.
+
+#### 1. Install Rust
+
+Go to **[https://rustup.rs](https://rustup.rs)** and download `rustup-init.exe`. Run it and follow the prompts — the default options are fine.
+
+#### 2. Verify the installation
+
+```powershell
+rustc --version
+cargo --version
+```
+
+Both commands should print a version number (e.g. `rustc 1.77.0`). If they return "not recognised", close and reopen your terminal.
+
+#### 3. Clone or download the project
+
+If you have Git:
+```powershell
+git clone https://github.com/rose-crisostomo/eight-puzzle-problem.git
+cd eight-puzzle-problem
+```
+
+Or download the ZIP from GitHub → **Code → Download ZIP**, then extract it and `cd` into the folder.
+
+#### 4. Build and run
+
+```powershell
+# Run directly via cargo
+cargo run --release
+```
+
+---
 
 ### CLI Options
 

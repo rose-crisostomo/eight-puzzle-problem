@@ -120,22 +120,6 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-fn format_board(state: &[u8]) {
-    println!("+---+---+---+");
-    for i in 0..3 {
-        print!("| ");
-        for j in 0..3 {
-            let tile = state[i * 3 + j];
-            if tile == 0 {
-                print!("  | "); // represents the empty space
-            } else {
-                print!("{} | ", tile);
-            }
-        }
-        println!("\n+---+---+---+");
-    }
-}
-
 fn find_cursor(board: &Board) -> Result<Coordinates, Box<dyn Error>> {
     for (r, row) in board.iter().enumerate() {
         for (c, &val) in row.iter().enumerate() {
@@ -181,7 +165,7 @@ fn print_results(results: Vec<CaseResults>) {
     }
 }
 
-fn get_num_moves(history: &Vec<State>, last_state: &Option<State>, printMoves: bool) -> usize {
+fn get_num_moves(history: &Vec<State>, last_state: &Option<State>, should_print_moves: bool) -> usize {
     if let Some(last_state) = last_state {
         let mut states: Vec<State> = vec![];
         let mut curr = last_state;
@@ -191,7 +175,7 @@ fn get_num_moves(history: &Vec<State>, last_state: &Option<State>, printMoves: b
         }
         states.push(*curr);
 
-        if printMoves {
+        if should_print_moves {
             print_moves(&mut states);
         }
 
@@ -215,7 +199,7 @@ fn bfs_search(goal: Board, init_state: State, history: &mut Vec<State>) -> Resul
     let mut queue: VecDeque<State> = VecDeque::new();
     queue.push_back(init_state);
     let mut visited: HashSet<Board> = HashSet::new();
-    let mut iter = 0;
+
     while !queue.is_empty() {
         if let Some(s) = queue.pop_front() {
             let parent_index = history.len();
@@ -273,8 +257,8 @@ fn print_board(board: &Board) {
     println!("{}", horizontal_edge);
     for row in board {
         print!("| ");
-        for (i, &tile) in row.iter().enumerate() {
-            let display = if tile == 0 { " ".to_string() } else { tile.to_string() };
+        for tile in row {
+            let display = if *tile == 0 { " ".to_string() } else { tile.to_string() };
             print!("{}", display);
 
             print!(" | ");
