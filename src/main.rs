@@ -146,8 +146,16 @@ fn print_results(results: Vec<CaseResults>) {
         print_board(&goal_state);
         println!();
 
+        if result.print_moves {
+            println!("Solving using BFS...");
+        }
         let bfs_moves = get_num_moves(&bfs.history, &bfs.last_state, result.print_moves);
+
+        if result.print_moves {
+            println!("\nSolving using DFS...");
+        }
         let dfs_moves = get_num_moves(&dfs.history, &dfs.last_state, result.print_moves);
+
         if bfs_moves > 0 {
             println!("  > BFS Result: {} moves (Optimal)", bfs_moves);
         }
@@ -196,12 +204,12 @@ fn print_moves(states: &mut Vec<State>) {
 }
 
 fn bfs_search(goal: Board, init_state: State, history: &mut Vec<State>) -> Result<State, Box<dyn std::error::Error>>{
-    let mut queue: VecDeque<State> = VecDeque::new();
-    queue.push_back(init_state);
+    let mut frontier: VecDeque<State> = VecDeque::new();
+    frontier.push_back(init_state);
     let mut visited: HashSet<Board> = HashSet::new();
 
-    while !queue.is_empty() {
-        if let Some(s) = queue.pop_front() {
+    while !frontier.is_empty() {
+        if let Some(s) = frontier.pop_front() {
             let parent_index = history.len();
             history.push(s);
 
@@ -213,7 +221,7 @@ fn bfs_search(goal: Board, init_state: State, history: &mut Vec<State>) -> Resul
                 else if !visited.insert(cs.board) {
                     continue;
                 }
-                queue.push_back(cs);
+                frontier.push_back(cs);
             }
         }
 
