@@ -207,15 +207,30 @@ fn bfs_search(goal: Board, init_state: State, history: &mut Vec<State>) -> Resul
     let mut frontier: VecDeque<State> = VecDeque::new();
     frontier.push_back(init_state);
     let mut visited: HashSet<Board> = HashSet::new();
+    visited.insert(init_state.board);
 
     while !frontier.is_empty() {
         if let Some(s) = frontier.pop_front() {
+            // for debugging state expansion
+            // println!("[Step {}] depth={} action={:?}",
+            //          history.len(),
+            //          s.depth,
+            //          get_action_str(&s.action)
+            // );
+            // print_board(&s.board);
             let parent_index = history.len();
             history.push(s);
 
             let child_states = expand(s.board, s.cursor, parent_index, s.depth);
             for cs in child_states {
                 if is_goal_state(goal, cs.board) {
+                    // for debugging state expansion
+                    // println!("[Step {}] depth={} action={:?}",
+                    //          history.len(),
+                    //          cs.depth,
+                    //          get_action_str(&cs.action)
+                    // );
+                    // print_board(&cs.board);
                     return Ok(cs);
                 }
                 else if !visited.insert(cs.board) {
@@ -233,8 +248,17 @@ fn dfs_search(goal: Board, init_state: State, history: &mut Vec<State>, limit: u
     let mut frontier: VecDeque<State> = VecDeque::new();
     frontier.push_back(init_state);
     let mut visited: HashSet<Board> = HashSet::new();
+    visited.insert(init_state.board);
+
     while !frontier.is_empty() {
         if let Some(s) = frontier.pop_back() {
+            // for debugging state expansion
+            // println!("[Step {}] depth={} action={:?}",
+            //          history.len(),
+            //          s.depth,
+            //          get_action_str(&s.action)
+            // );
+            // print_board(&s.board);
             let parent_index = history.len();
             history.push(s);
 
@@ -244,13 +268,13 @@ fn dfs_search(goal: Board, init_state: State, history: &mut Vec<State>, limit: u
             else if s.depth == limit {
                 return Err("Cutoff".into());
             }
-            else if !visited.insert(s.board) { // check cycle
-                continue;
-            }
 
             let mut child_states = expand(s.board, s.cursor, parent_index, s.depth);
             child_states.reverse();
             for cs in child_states {
+                if !visited.insert(cs.board) { // check cycle
+                    continue;
+                }
                 frontier.push_back(cs);
             }
         }
